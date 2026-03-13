@@ -243,3 +243,32 @@ footer {
   line-height: 2;
 }
 
+@media (max-width: 600px) {
+  .botoes {
+    flex-wrap: wrap;
+  }
+
+  .botoes a {
+    flex: 1 1 calc(50% - 10px);
+    text-align: center;
+  }
+
+  .sobre,
+  .estrutura {
+    flex-direction: column;
+  }
+
+  .estrutura {
+    flex-direction: column-reverse;
+  }
+
+  .cards {
+    flex-direction: column;
+  }
+
+  .sobre-figura,
+  .estrutura-figura {
+    min-height: 120px;
+    width: 100%;
+  }
+}
