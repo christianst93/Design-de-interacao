@@ -264,8 +264,9 @@ footer {
     gap: 8px;
   }
 
+  @media (max-width: 600px) {
   .botoes a {
-    flex: 1 1 auto;
+    flex: 1 1 calc(50% - 5px);
     text-align: center;
     font-size: 13px;
     padding: 8px 12px;
