@@ -202,6 +202,7 @@ main {
 
 .cards {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
@@ -212,6 +213,14 @@ main {
   padding: 24px;
   text-align: center;
   border: 1px solid #9fe1cb;
+}
+
+.cards h2 {
+  font-size: 20px;
+  color: #0f6e56;
+  margin-bottom: 12px;
+  text-align: center;
+  width: 100%;
 }
 
 .card h3 {
