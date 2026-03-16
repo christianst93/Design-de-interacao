@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Nunito+Sans:wght@200..1000&family=Work+Sans:wght@100..900&display=swap" rel="stylesheet">
+    <title>Trabalho 1 - Editor de Cartões</title>
+  </head>
+  <body>
+
+    <header>
+      <div>
+        <h1>Trabalhos de Design de interação</h1>
+        <p>portfólio da disciplina</p>
+      </div>
+    </header>
+
+    <hr>
+
+    <nav>
+      <div class="botoes">
+        <a href="index.html">Apresentação</a>
+        <a href="trabalho1.html">Trabalho 1</a>
+        <a href="trabalho2.html">Trabalho 2</a>
+        <a href="trabalho3.html">Trabalho 3</a>
+      </div>
+    </nav>
+
+    <main id="main-editor">
+
+      <section class="page-title">
+        <h2>Trabalho 1 – Editor de Cartões</h2>
+        <p>Monte seu cartão personalizado: escolha o fundo, insira uma imagem e adicione textos com estilo. Tudo acontece em tempo real.</p>
+      </section>
+
+      <div class="editor-wrapper">
+
+        <!-- ── Painel de controles ──────────────────────────────── -->
+        <aside class="controls-panel" id="controlsPanel">
+          <h3 class="panel-title">⚙ Painel de edição</h3>
+
+          <!-- 1. Fundo ------------------------------------------- -->
+          <div class="accordion">
+            <button class="accordion-btn open" data-target="sec-bg">
+              <span>🖼 Fundo do cartão</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body open" id="sec-bg">
+
+              <div class="field">
+                <label for="cardBgType">Tipo de fundo</label>
+                <select id="cardBgType" onchange="onBgTypeChange()">
+                  <option value="solid">Cor sólida</option>
+                  <option value="gradient">Gradiente</option>
+                  <option value="image">Imagem</option>
+                </select>
+              </div>
+
+              <div id="bg-solid">
+                <div class="field">
+                  <label for="cardBgColor">Cor de fundo</label>
+                  <input type="color" id="cardBgColor" value="#ffffff" oninput="applyBg()">
+                </div>
+              </div>
+
+              <div id="bg-gradient" style="display:none;">
+                <div class="field">
+                  <label for="gradColor1">Cor inicial</label>
+                  <input type="color" id="gradColor1" value="#a8edea" oninput="applyBg()">
+                </div>
+                <div class="field">
+                  <label for="gradColor2">Cor final</label>
+                  <input type="color" id="gradColor2" value="#fed6e3" oninput="applyBg()">
+                </div>
+                <div class="field">
+                  <label for="gradAngle">Ângulo</label>
+                  <div class="range-row">
+                    <input type="range" id="gradAngle" min="0" max="360" value="135"
+                           oninput="syncRangeLabel(this,'°'); applyBg()">
+                    <span class="range-val">135°</span>
+                  </div>
+                </div>
+              </div>
+
+              <div id="bg-image" style="display:none;">
+                <div class="field">
+                  <label for="bgImageFile">Imagem de fundo</label>
+                  <input type="file" id="bgImageFile" accept="image/png,image/jpeg,image/webp,image/gif" onchange="loadBgImage(this)">
+                  <span class="field-hint">PNG, JPG, WEBP ou GIF</span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="cardWidth">Largura do cartão</label>
+                <div class="range-row">
+                  <input type="range" id="cardWidth" min="280" max="600" value="500"
+                         oninput="syncRangeLabel(this,'px'); resizeCard()">
+                  <span class="range-val">500px</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="cardHeight">Altura do cartão</label>
+                <div class="range-row">
+                  <input type="range" id="cardHeight" min="200" max="700" value="350"
+                         oninput="syncRangeLabel(this,'px'); resizeCard()">
+                  <span class="range-val">350px</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 2. Imagem no cartão --------------------------------- -->
+          <div class="accordion">
+            <button class="accordion-btn" data-target="sec-img">
+              <span>📷 Inserir imagem</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body" id="sec-img">
+
+              <div class="field">
+                <label for="imgFile">Arquivo de imagem</label>
+                <input type="file" id="imgFile" accept="image/png,image/jpeg,image/webp,image/gif" onchange="onImgFileChange(this)">
+                <span class="field-hint">PNG, JPG, WEBP ou GIF</span>
+              </div>
+
+              <div id="img-controls" style="display:none;">
+                <div class="field">
+                  <label for="imgW">Largura</label>
+                  <div class="range-row">
+                    <input type="range" id="imgW" min="20" max="580" value="180"
+                           oninput="syncRangeLabel(this,'px'); applyImg()">
+                    <span class="range-val">180px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgH">Altura</label>
+                  <div class="range-row">
+                    <input type="range" id="imgH" min="20" max="680" value="140"
+                           oninput="syncRangeLabel(this,'px'); applyImg()">
+                    <span class="range-val">140px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgRadius">Arredondamento</label>
+                  <div class="range-row">
+                    <input type="range" id="imgRadius" min="0" max="300" value="0"
+                           oninput="syncRangeLabel(this,'px'); applyImg()">
+                    <span class="range-val">0px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgX">Posição horizontal (X)</label>
+                  <div class="range-row">
+                    <input type="range" id="imgX" min="0" max="560" value="10"
+                           oninput="syncRangeLabel(this,'px'); applyImg()">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgY">Posição vertical (Y)</label>
+                  <div class="range-row">
+                    <input type="range" id="imgY" min="0" max="660" value="10"
+                           oninput="syncRangeLabel(this,'px'); applyImg()">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="imgOpacity">Opacidade</label>
+                  <div class="range-row">
+                    <input type="range" id="imgOpacity" min="5" max="100" value="100"
+                           oninput="syncRangeLabel(this,'%'); applyImg()">
+                    <span class="range-val">100%</span>
+                  </div>
+                </div>
+                <button class="btn-action btn-danger" onclick="removeImg()">🗑 Remover imagem</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 3. Textos ------------------------------------------ -->
+          <div class="accordion">
+            <button class="accordion-btn" data-target="sec-text">
+              <span>✏️ Textos</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body" id="sec-text">
+
+              <fieldset class="sub-fieldset">
+                <legend>Novo texto</legend>
+
+                <div class="field">
+                  <label for="newTextContent">
+                    Conteúdo
+                    <span class="char-count" id="charCount">0 / 200</span>
+                  </label>
+                  <textarea id="newTextContent" maxlength="200" rows="3"
+                            placeholder="Digite o texto do cartão…"
+                            oninput="updateCharCount()"></textarea>
+                </div>
+
+                <div class="field">
+                  <label for="newTextFont">Fonte</label>
+                  <select id="newTextFont">
+                    <option value="Montserrat">Montserrat</option>
+                    <option value="'Nunito Sans'">Nunito Sans</option>
+                    <option value="'Work Sans'">Work Sans</option>
+                    <option value="Georgia, serif">Georgia (Serif)</option>
+                    <option value="'Courier New', monospace">Courier New (Mono)</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label for="newTextSize">Tamanho</label>
+                  <div class="range-row">
+                    <input type="range" id="newTextSize" min="10" max="80" value="24"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">24px</span>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="newTextColor">Cor do texto</label>
+                  <input type="color" id="newTextColor" value="#1a1a1a">
+                </div>
+
+                <div class="two-col">
+                  <div class="field">
+                    <label for="newTextAlign">Alinhamento</label>
+                    <select id="newTextAlign">
+                      <option value="left">Esquerda</option>
+                      <option value="center" selected>Centro</option>
+                      <option value="right">Direita</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="newTextWeight">Peso</label>
+                    <select id="newTextWeight">
+                      <option value="400">Normal</option>
+                      <option value="700">Negrito</option>
+                      <option value="900">Extra-negrito</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label>Fundo atrás do texto</label>
+                  <div class="check-row">
+                    <label class="check-label">
+                      <input type="checkbox" id="newTextBgEnabled" onchange="toggleNewTextBg()">
+                      Ativar fundo
+                    </label>
+                    <input type="color" id="newTextBg" value="#ffffffcc" disabled
+                           oninput="/* live preview not needed here */">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="newTextX">Posição horizontal (X)</label>
+                  <div class="range-row">
+                    <input type="range" id="newTextX" min="0" max="460" value="10"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="newTextY">Posição vertical (Y)</label>
+                  <div class="range-row">
+                    <input type="range" id="newTextY" min="0" max="640" value="10"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+
+                <button class="btn-action" onclick="addText()">+ Adicionar texto</button>
+              </fieldset>
+
+              <!-- Lista de textos -->
+              <div id="texts-list" class="items-list"></div>
+
+            </div>
+          </div>
+
+          <!-- 4. Formas ------------------------------------------ -->
+          <div class="accordion">
+            <button class="accordion-btn" data-target="sec-shapes">
+              <span>▭ Formas decorativas</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body" id="sec-shapes">
+
+              <fieldset class="sub-fieldset">
+                <legend>Nova forma</legend>
+
+                <div class="field">
+                  <label for="shapeColor">Cor de fundo</label>
+                  <input type="color" id="shapeColor" value="#9fe1cb">
+                </div>
+
+                <div class="two-col">
+                  <div class="field">
+                    <label for="shapeW">Largura</label>
+                    <div class="range-row">
+                      <input type="range" id="shapeW" min="10" max="580" value="120"
+                             oninput="syncRangeLabel(this,'px')">
+                      <span class="range-val">120px</span>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <label for="shapeH">Altura</label>
+                    <div class="range-row">
+                      <input type="range" id="shapeH" min="10" max="680" value="60"
+                             oninput="syncRangeLabel(this,'px')">
+                      <span class="range-val">60px</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="shapeRadius">Arredondamento</label>
+                  <div class="range-row">
+                    <input type="range" id="shapeRadius" min="0" max="300" value="6"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">6px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="shapeOpacity">Opacidade</label>
+                  <div class="range-row">
+                    <input type="range" id="shapeOpacity" min="5" max="100" value="100"
+                           oninput="syncRangeLabel(this,'%')">
+                    <span class="range-val">100%</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="shapeX">Posição X</label>
+                  <div class="range-row">
+                    <input type="range" id="shapeX" min="0" max="560" value="10"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="shapeY">Posição Y</label>
+                  <div class="range-row">
+                    <input type="range" id="shapeY" min="0" max="640" value="10"
+                           oninput="syncRangeLabel(this,'px')">
+                    <span class="range-val">10px</span>
+                  </div>
+                </div>
+
+                <button class="btn-action" onclick="addShape()">+ Adicionar forma</button>
+              </fieldset>
+
+              <div id="shapes-list" class="items-list"></div>
+
+            </div>
+          </div>
+
+          <!-- Limpar tudo --------------------------------------- -->
+          <div class="reset-row">
+            <button class="btn-action btn-danger full-width" onclick="resetAll()">🗑 Limpar tudo</button>
+          </div>
+
+        </aside>
+
+        <!-- ── Pré-visualização ──────────────────────────────────── -->
+        <div class="preview-col">
+          <p class="preview-label">Pré-visualização em tempo real</p>
+          <div id="card">
+            <div id="card-hint">Use o painel ao lado para criar seu cartão ✨</div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      <p>Disciplina: Design de interação | Aluno: Christian Torres</p>
+      <p><a href="https://github.com/christianst93" target="_blank">github.com/christianst93</a></p>
+    </footer>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>
