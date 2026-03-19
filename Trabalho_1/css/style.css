@@ -83,7 +83,6 @@ nav {
   gap: 28px;
 }
 
-/* ── Título da página ─────────────────────────────────────────── */
 .page-title {
   background-color: #d4edda;
   border-radius: 8px;
@@ -100,7 +99,6 @@ nav {
   color: #1a3a2a;
 }
 
-/* ── Wrapper principal (painel + preview) ─────────────────────── */
 .editor-wrapper {
   display: grid;
   grid-template-columns: 320px 1fr;
@@ -108,9 +106,6 @@ nav {
   align-items: start;
 }
 
-/* ================================================================
-   PAINEL DE CONTROLES
-   ================================================================ */
 .controls-panel {
   background: #ffffff;
   border-radius: 10px;
@@ -132,7 +127,6 @@ nav {
   margin: 0;
 }
 
-/* ── Accordion ────────────────────────────────────────────────── */
 .accordion {
   border-bottom: 1px solid #d0ece3;
 }
@@ -173,7 +167,6 @@ nav {
 }
 .accordion-body.open { display: flex; }
 
-/* ── Campos do formulário ─────────────────────────────────────── */
 .field {
   display: flex;
   flex-direction: column;
@@ -253,6 +246,18 @@ nav {
   color: #7aaa94;
 }
 
+#theme-hint {
+  background: #edf7f2;
+  border-left: 3px solid var(--color-btn);
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 11px;
+  color: #0f6e56;
+  font-weight: 600;
+  display: none;
+}
+#theme-hint.visible { display: block; }
+
 /* Range */
 .range-row {
   display: flex;
@@ -273,14 +278,12 @@ nav {
   white-space: nowrap;
 }
 
-/* Dois campos lado a lado */
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
 
-/* Checkbox row */
 .check-row {
   display: flex;
   align-items: center;
@@ -316,7 +319,6 @@ nav {
   cursor: not-allowed;
 }
 
-/* Contador de caracteres */
 .char-count {
   font-size: 10px;
   font-weight: 600;
@@ -326,7 +328,6 @@ nav {
 }
 .char-count.near-limit { color: #e57373; }
 
-/* ── Fieldset interno ─────────────────────────────────────────── */
 .sub-fieldset {
   border: 1px solid #c8e6d4;
   border-radius: 8px;
@@ -344,7 +345,6 @@ nav {
   padding: 0 6px;
 }
 
-/* ── Botões de ação ───────────────────────────────────────────── */
 .btn-action {
   background-color: var(--color-btn);
   color: var(--color-btn-text);
@@ -367,7 +367,6 @@ nav {
 
 .full-width { width: 100%; }
 
-/* ── Lista de itens adicionados ───────────────────────────────── */
 .items-list {
   display: flex;
   flex-direction: column;
@@ -424,20 +423,15 @@ nav {
 }
 .item-card-body.open { display: flex; }
 
-/* ── Botão limpar tudo ────────────────────────────────────────── */
 .reset-row {
   padding: 14px 18px 16px;
 }
 
-/* ================================================================
-   PREVIEW DO CARTÃO
-   ================================================================ */
 .preview-col {
   display: flex;
   flex-direction: column;
   gap: 10px;
   align-items: flex-start;
-  /* sticky para acompanhar o scroll do painel */
   position: sticky;
   top: 20px;
 }
@@ -461,7 +455,6 @@ nav {
   transition: background .3s, width .2s, min-height .2s;
 }
 
-/* Hint no cartão vazio */
 #card-hint {
   position: absolute;
   inset: 0;
@@ -477,7 +470,6 @@ nav {
   line-height: 1.6;
 }
 
-/* Elementos dentro do cartão */
 .card-element {
   position: absolute;
   box-sizing: border-box;
@@ -507,7 +499,6 @@ nav {
   border-radius: inherit;
 }
 
-
 a {
   color: #ffffff;
   text-decoration: none;
@@ -527,9 +518,7 @@ footer {
   font-size: 13px;
   line-height: 2;
 }
-/* ================================================================
-   RESPONSIVO
-   ================================================================ */
+
 @media (max-width: 900px) {
   .editor-wrapper {
     grid-template-columns: 1fr;
@@ -549,4 +538,13 @@ footer {
   #main-editor { padding: 20px 14px 36px; }
   .page-title  { padding: 18px 18px; }
   .two-col     { grid-template-columns: 1fr; }
+
+  nav { padding: 12px 16px; }
+  .botoes { flex-wrap: wrap; gap: 8px; }
+  .botoes a {
+    flex: 1 1 calc(50% - 5px);
+    text-align: center;
+    font-size: 13px;
+    padding: 8px 12px;
+  }
 }

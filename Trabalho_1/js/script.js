@@ -1,22 +1,34 @@
-/* ================================================================
-   trabalho1.js  –  Editor de Cartões
-   ================================================================ */
-
 'use strict';
 
-// ── Referências ────────────────────────────────────────────────
 const card     = document.getElementById('card');
 const cardHint = document.getElementById('card-hint');
 
-// Estado de itens
-let texts  = [];   // { id, el }
-let shapes = [];   // { id, el }
-let imgEl  = null;
+let texts   = [];
+let shapes  = [];
+let imgEl   = null;
 let counter = 0;
 
-// ══════════════════════════════════════════════════════════════
-//  ACCORDION
-// ══════════════════════════════════════════════════════════════
+const RANGE_SUFFIXES = {
+  gradAngle:   '°',
+  cardWidth:   'px',
+  cardHeight:  'px',
+  imgW:        'px',
+  imgH:        'px',
+  imgRadius:   'px',
+  imgX:        'px',
+  imgY:        'px',
+  imgOpacity:  '%',
+  newTextSize: 'px',
+  newTextX:    'px',
+  newTextY:    'px',
+  shapeW:      'px',
+  shapeH:      'px',
+  shapeRadius: 'px',
+  shapeOpacity:'%',
+  shapeX:      'px',
+  shapeY:      'px'
+};
+
 document.querySelectorAll('.accordion-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const target = document.getElementById(btn.dataset.target);
@@ -26,11 +38,6 @@ document.querySelectorAll('.accordion-btn').forEach(btn => {
   });
 });
 
-// ══════════════════════════════════════════════════════════════
-//  UTILITÁRIOS
-// ══════════════════════════════════════════════════════════════
-
-/** Sincroniza o label ao lado de um range input */
 function syncRangeLabel(input, suffix) {
   const label = input.nextElementSibling;
   if (label && label.classList.contains('range-val')) {
@@ -38,7 +45,6 @@ function syncRangeLabel(input, suffix) {
   }
 }
 
-/** Escapa HTML para evitar XSS */
 function escHtml(str) {
   return str
     .replace(/&/g, '&amp;')
@@ -47,19 +53,14 @@ function escHtml(str) {
     .replace(/"/g, '&quot;');
 }
 
-/** Lê valor numérico de um range pelo id */
 function rangeVal(id) { return parseInt(document.getElementById(id).value, 10); }
-
-/** Lê valor string de um select/input pelo id */
 function inputVal(id) { return document.getElementById(id).value; }
 
-/** Atualiza hint do cartão vazio */
 function updateHint() {
   const hasContent = texts.length > 0 || shapes.length > 0 || imgEl !== null;
   cardHint.style.display = hasContent ? 'none' : 'flex';
 }
 
-/** Destaca campo com erro (borda vermelha temporária) */
 function errorField(id) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -68,9 +69,131 @@ function errorField(id) {
   setTimeout(() => { el.style.borderColor = ''; }, 1600);
 }
 
-// ══════════════════════════════════════════════════════════════
-//  CONTADOR DE CARACTERES
-// ══════════════════════════════════════════════════════════════
+function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
+
+function rgbToHex(rgb) {
+  if (!rgb) return null;
+  if (/^#/.test(rgb)) return rgb;
+  const m = rgb.match(/\d+/g);
+  if (!m || m.length < 3) return null;
+  return '#' + m.slice(0, 3).map(n => (+n).toString(16).padStart(2, '0')).join('');
+}
+
+const THEMES = {
+  blank: null,
+  birthday: {
+    label: '🎂 Aniversário aplicado!',
+    bgType: 'gradient',
+    grad1: '#ffe066',
+    grad2: '#ff6eb4',
+    angle: 135,
+    texts: [
+      { content: 'Feliz Aniversário! 🎉', size: 32, color: '#7b003c', weight: '700', align: 'center', x: 50, y: 120 },
+      { content: 'Que este dia seja incrível!', size: 16, color: '#5a003a', weight: '400', align: 'center', x: 60, y: 180 }
+    ]
+  },
+  christmas: {
+    label: '🎄 Natal aplicado!',
+    bgType: 'gradient',
+    grad1: '#1a6b2f',
+    grad2: '#b22222',
+    angle: 160,
+    texts: [
+      { content: 'Feliz Natal! 🎄', size: 34, color: '#fffbe6', weight: '700', align: 'center', x: 90, y: 110 },
+      { content: 'Paz, amor e alegria!', size: 16, color: '#ffd700', weight: '400', align: 'center', x: 100, y: 175 }
+    ]
+  },
+  easter: {
+    label: '🐣 Páscoa aplicada!',
+    bgType: 'gradient',
+    grad1: '#ffe5f0',
+    grad2: '#b5ead7',
+    angle: 120,
+    texts: [
+      { content: 'Feliz Páscoa! 🐣', size: 32, color: '#6b3fa0', weight: '700', align: 'center', x: 90, y: 120 },
+      { content: 'Que a alegria renove seu coração!', size: 14, color: '#3d2060', weight: '400', align: 'center', x: 30, y: 185 }
+    ]
+  },
+  wedding: {
+    label: '💍 Casamento aplicado!',
+    bgType: 'gradient',
+    grad1: '#fff8f0',
+    grad2: '#f7d6e0',
+    angle: 150,
+    texts: [
+      { content: 'Parabéns aos noivos! 💍', size: 28, color: '#8b1a4a', weight: '700', align: 'center', x: 60, y: 120 },
+      { content: 'Que a felicidade seja eterna!', size: 15, color: '#5a0030', weight: '400', align: 'center', x: 65, y: 178 }
+    ]
+  },
+  newyear: {
+    label: '🎆 Ano Novo aplicado!',
+    bgType: 'gradient',
+    grad1: '#0d0d2b',
+    grad2: '#1a1a6e',
+    angle: 180,
+    texts: [
+      { content: 'Feliz Ano Novo! 🎆', size: 32, color: '#ffd700', weight: '700', align: 'center', x: 80, y: 110 },
+      { content: 'Que 2025 seja extraordinário!', size: 15, color: '#c8c8ff', weight: '400', align: 'center', x: 55, y: 175 }
+    ]
+  }
+};
+
+function applyTheme() {
+  const key   = inputVal('cardTheme');
+  const theme = THEMES[key];
+  const hint  = document.getElementById('theme-hint');
+
+  if (!theme) {
+    hint.classList.remove('visible');
+    hint.textContent = '';
+    return;
+  }
+
+  texts.forEach(t => t.el.remove());
+  shapes.forEach(s => s.el.remove());
+  if (imgEl) { imgEl.remove(); imgEl = null; }
+  texts  = [];
+  shapes = [];
+  buildTextsList();
+  buildShapesList();
+
+  const bgTypeEl = document.getElementById('cardBgType');
+  bgTypeEl.value = theme.bgType;
+  onBgTypeChange();
+
+  if (theme.bgType === 'gradient') {
+    document.getElementById('gradColor1').value = theme.grad1;
+    document.getElementById('gradColor2').value = theme.grad2;
+    const angleEl = document.getElementById('gradAngle');
+    angleEl.value = theme.angle;
+    syncRangeLabel(angleEl, '°');
+    applyBg();
+  }
+
+  theme.texts.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'card-element card-el-text';
+    el.dataset.id = ++counter;
+    el.style.left       = t.x + 'px';
+    el.style.top        = t.y + 'px';
+    el.style.fontFamily = 'Montserrat';
+    el.style.fontSize   = t.size + 'px';
+    el.style.color      = t.color;
+    el.style.textAlign  = t.align;
+    el.style.fontWeight = t.weight;
+    el.style.lineHeight = '1.35';
+    el.innerHTML = escHtml(t.content);
+    card.appendChild(el);
+    texts.push({ id: counter, el });
+  });
+
+  updateHint();
+  buildTextsList();
+
+  hint.textContent = theme.label;
+  hint.classList.add('visible');
+}
+
 function updateCharCount() {
   const ta    = document.getElementById('newTextContent');
   const label = document.getElementById('charCount');
@@ -79,15 +202,11 @@ function updateCharCount() {
   label.classList.toggle('near-limit', len >= 180);
 }
 
-// ══════════════════════════════════════════════════════════════
-//  FUNDO DO CARTÃO
-// ══════════════════════════════════════════════════════════════
 function onBgTypeChange() {
   const v = inputVal('cardBgType');
   document.getElementById('bg-solid').style.display    = v === 'solid'    ? 'block' : 'none';
   document.getElementById('bg-gradient').style.display = v === 'gradient' ? 'flex'  : 'none';
   document.getElementById('bg-image').style.display    = v === 'image'    ? 'flex'  : 'none';
-  // limpa imagem de fundo se trocar de modo
   if (v !== 'image') {
     card.style.backgroundImage    = '';
     card.style.backgroundSize     = '';
@@ -104,18 +223,17 @@ function applyBg() {
     const c1 = inputVal('gradColor1');
     const c2 = inputVal('gradColor2');
     const a  = inputVal('gradAngle');
-    card.style.background = `linear-gradient(${a}deg, ${c1}, ${c2})`;
+    card.style.background = 'linear-gradient(' + a + 'deg, ' + c1 + ', ' + c2 + ')';
   }
-  // para imagem, applyBg é chamado pelo loadBgImage
 }
 
 function loadBgImage(input) {
   if (!input.files || !input.files[0]) return;
   const reader = new FileReader();
-  reader.onload = e => {
+  reader.onload = function (e) {
     card.style.background         = 'none';
     card.style.backgroundColor    = '#000';
-    card.style.backgroundImage    = `url(${e.target.result})`;
+    card.style.backgroundImage    = 'url(' + e.target.result + ')';
     card.style.backgroundSize     = 'cover';
     card.style.backgroundPosition = 'center';
   };
@@ -125,18 +243,13 @@ function loadBgImage(input) {
 function resizeCard() {
   card.style.width     = rangeVal('cardWidth')  + 'px';
   card.style.minHeight = rangeVal('cardHeight') + 'px';
-  // reaplica limites dos ranges de posição dos elementos
   clampAllElements();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  IMAGEM NO CARTÃO
-// ══════════════════════════════════════════════════════════════
 function onImgFileChange(input) {
   if (!input.files || !input.files[0]) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    // remove imagem anterior se existir
+  reader.onload = function (e) {
     if (imgEl) imgEl.remove();
 
     imgEl = document.createElement('div');
@@ -167,18 +280,15 @@ function applyImg() {
 
 function removeImg() {
   if (imgEl) { imgEl.remove(); imgEl = null; }
-  document.getElementById('imgFile').value         = '';
+  document.getElementById('imgFile').value               = '';
   document.getElementById('img-controls').style.display = 'none';
   updateHint();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  TEXTOS
-// ══════════════════════════════════════════════════════════════
 function toggleNewTextBg() {
   const cb    = document.getElementById('newTextBgEnabled');
   const color = document.getElementById('newTextBg');
-  color.disabled = !cb.checked;
+  color.disabled      = !cb.checked;
   color.style.opacity = cb.checked ? '1' : '.35';
 }
 
@@ -191,13 +301,13 @@ function addText() {
   el.className  = 'card-element card-el-text';
   el.dataset.id = id;
 
-  const font   = inputVal('newTextFont');
-  const size   = rangeVal('newTextSize');
-  const color  = inputVal('newTextColor');
-  const align  = inputVal('newTextAlign');
-  const weight = inputVal('newTextWeight');
-  const x      = rangeVal('newTextX');
-  const y      = rangeVal('newTextY');
+  const font      = inputVal('newTextFont');
+  const size      = rangeVal('newTextSize');
+  const color     = inputVal('newTextColor');
+  const align     = inputVal('newTextAlign');
+  const weight    = inputVal('newTextWeight');
+  const x         = rangeVal('newTextX');
+  const y         = rangeVal('newTextY');
   const bgEnabled = document.getElementById('newTextBgEnabled').checked;
   const bgColor   = bgEnabled ? inputVal('newTextBg') : '';
 
@@ -224,19 +334,20 @@ function addText() {
 }
 
 function resetTextForm() {
-  document.getElementById('newTextContent').value = '';
+  document.getElementById('newTextContent').value     = '';
   updateCharCount();
   document.getElementById('newTextBgEnabled').checked = false;
-  document.getElementById('newTextBg').disabled = true;
-  document.getElementById('newTextBg').style.opacity = '.35';
+  const bgInput = document.getElementById('newTextBg');
+  bgInput.disabled      = true;
+  bgInput.style.opacity = '.35';
 }
 
 function buildTextsList() {
   const list = document.getElementById('texts-list');
   list.innerHTML = '';
-  texts.forEach(({ id, el }) => {
-    const preview = el.textContent.replace(/\n/g,' ').substring(0, 22) || '(texto vazio)';
-    list.appendChild(buildItemCard(id, '✏️ ' + preview, buildTextEditBody(id, el), () => deleteText(id)));
+  texts.forEach(function (item) {
+    const preview = item.el.textContent.replace(/\n/g, ' ').substring(0, 22) || '(texto vazio)';
+    list.appendChild(buildItemCard(item.id, '✏️ ' + preview, buildTextEditBody(item.id, item.el), function () { deleteText(item.id); }));
   });
 }
 
@@ -244,53 +355,45 @@ function buildTextEditBody(id, el) {
   const wrap = document.createElement('div');
   wrap.style.cssText = 'display:flex;flex-direction:column;gap:9px;';
 
-  // Conteúdo
-  wrap.appendChild(makeField('Conteúdo', makeTextarea(`tedit-content-${id}`, el.textContent, 200, val => {
+  wrap.appendChild(makeField('Conteúdo', makeTextarea('tedit-content-' + id, el.textContent, 200, function (val) {
     el.innerHTML = escHtml(val).replace(/\n/g, '<br>');
     buildTextsList();
   })));
 
-  // Fonte
   const fontOpts = [
-    ['Montserrat','Montserrat'],
-    ["'Nunito Sans'",'Nunito Sans'],
-    ["'Work Sans'",'Work Sans'],
-    ['Georgia, serif','Georgia (Serif)'],
-    ["'Courier New', monospace",'Courier New (Mono)']
+    ['Montserrat', 'Montserrat'],
+    ["'Nunito Sans'", 'Nunito Sans'],
+    ["'Work Sans'", 'Work Sans'],
+    ['Georgia, serif', 'Georgia (Serif)'],
+    ["'Courier New', monospace", 'Courier New (Mono)']
   ];
-  wrap.appendChild(makeField('Fonte', makeSelect(`tedit-font-${id}`, fontOpts, el.style.fontFamily, val => {
+  wrap.appendChild(makeField('Fonte', makeSelect('tedit-font-' + id, fontOpts, el.style.fontFamily, function (val) {
     el.style.fontFamily = val;
   })));
 
-  // Tamanho
-  wrap.appendChild(makeField('Tamanho', makeRange(`tedit-size-${id}`, 10, 80, parseInt(el.style.fontSize), 'px', val => {
+  wrap.appendChild(makeField('Tamanho', makeRange('tedit-size-' + id, 10, 80, parseInt(el.style.fontSize), 'px', function (val) {
     el.style.fontSize = val + 'px';
   })));
 
-  // Cor
-  wrap.appendChild(makeField('Cor do texto', makeColor(`tedit-color-${id}`, el.style.color, val => {
+  wrap.appendChild(makeField('Cor do texto', makeColor('tedit-color-' + id, el.style.color, function (val) {
     el.style.color = val;
   })));
 
-  // Alinhamento
-  const alignOpts = [['left','Esquerda'],['center','Centro'],['right','Direita']];
-  wrap.appendChild(makeField('Alinhamento', makeSelect(`tedit-align-${id}`, alignOpts, el.style.textAlign, val => {
+  const alignOpts = [['left', 'Esquerda'], ['center', 'Centro'], ['right', 'Direita']];
+  wrap.appendChild(makeField('Alinhamento', makeSelect('tedit-align-' + id, alignOpts, el.style.textAlign, function (val) {
     el.style.textAlign = val;
   })));
 
-  // Peso
-  const weightOpts = [['400','Normal'],['700','Negrito'],['900','Extra-negrito']];
-  wrap.appendChild(makeField('Peso', makeSelect(`tedit-weight-${id}`, weightOpts, el.style.fontWeight, val => {
+  const weightOpts = [['400', 'Normal'], ['700', 'Negrito'], ['900', 'Extra-negrito']];
+  wrap.appendChild(makeField('Peso', makeSelect('tedit-weight-' + id, weightOpts, el.style.fontWeight, function (val) {
     el.style.fontWeight = val;
   })));
 
-  // Posição X
-  wrap.appendChild(makeField('Posição X', makeRange(`tedit-x-${id}`, 0, 560, parseInt(el.style.left), 'px', val => {
+  wrap.appendChild(makeField('Posição X', makeRange('tedit-x-' + id, 0, 560, parseInt(el.style.left), 'px', function (val) {
     el.style.left = val + 'px';
   })));
 
-  // Posição Y
-  wrap.appendChild(makeField('Posição Y', makeRange(`tedit-y-${id}`, 0, 660, parseInt(el.style.top), 'px', val => {
+  wrap.appendChild(makeField('Posição Y', makeRange('tedit-y-' + id, 0, 660, parseInt(el.style.top), 'px', function (val) {
     el.style.top = val + 'px';
   })));
 
@@ -298,7 +401,7 @@ function buildTextEditBody(id, el) {
 }
 
 function deleteText(id) {
-  const idx = texts.findIndex(t => t.id === id);
+  const idx = texts.findIndex(function (t) { return t.id === id; });
   if (idx === -1) return;
   texts[idx].el.remove();
   texts.splice(idx, 1);
@@ -306,9 +409,6 @@ function deleteText(id) {
   buildTextsList();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  FORMAS
-// ══════════════════════════════════════════════════════════════
 function addShape() {
   const id = ++counter;
   const el = document.createElement('div');
@@ -340,8 +440,8 @@ function addShape() {
 function buildShapesList() {
   const list = document.getElementById('shapes-list');
   list.innerHTML = '';
-  shapes.forEach(({ id, el }) => {
-    list.appendChild(buildItemCard(id, '▭ Forma #' + id, buildShapeEditBody(id, el), () => deleteShape(id)));
+  shapes.forEach(function (item) {
+    list.appendChild(buildItemCard(item.id, '▭ Forma #' + item.id, buildShapeEditBody(item.id, item.el), function () { deleteShape(item.id); }));
   });
 }
 
@@ -349,25 +449,25 @@ function buildShapeEditBody(id, el) {
   const wrap = document.createElement('div');
   wrap.style.cssText = 'display:flex;flex-direction:column;gap:9px;';
 
-  wrap.appendChild(makeField('Cor de fundo', makeColor(`sedit-color-${id}`, el.style.backgroundColor, val => {
+  wrap.appendChild(makeField('Cor de fundo', makeColor('sedit-color-' + id, el.style.backgroundColor, function (val) {
     el.style.backgroundColor = val;
   })));
-  wrap.appendChild(makeField('Largura', makeRange(`sedit-w-${id}`, 10, 580, parseInt(el.style.width), 'px', val => {
+  wrap.appendChild(makeField('Largura', makeRange('sedit-w-' + id, 10, 580, parseInt(el.style.width), 'px', function (val) {
     el.style.width = val + 'px';
   })));
-  wrap.appendChild(makeField('Altura', makeRange(`sedit-h-${id}`, 10, 680, parseInt(el.style.height), 'px', val => {
+  wrap.appendChild(makeField('Altura', makeRange('sedit-h-' + id, 10, 680, parseInt(el.style.height), 'px', function (val) {
     el.style.height = val + 'px';
   })));
-  wrap.appendChild(makeField('Arredondamento', makeRange(`sedit-r-${id}`, 0, 300, parseInt(el.style.borderRadius), 'px', val => {
+  wrap.appendChild(makeField('Arredondamento', makeRange('sedit-r-' + id, 0, 300, parseInt(el.style.borderRadius), 'px', function (val) {
     el.style.borderRadius = val + 'px';
   })));
-  wrap.appendChild(makeField('Opacidade', makeRange(`sedit-op-${id}`, 5, 100, Math.round(parseFloat(el.style.opacity || 1) * 100), '%', val => {
+  wrap.appendChild(makeField('Opacidade', makeRange('sedit-op-' + id, 5, 100, Math.round(parseFloat(el.style.opacity || '1') * 100), '%', function (val) {
     el.style.opacity = val / 100;
   })));
-  wrap.appendChild(makeField('Posição X', makeRange(`sedit-x-${id}`, 0, 560, parseInt(el.style.left), 'px', val => {
+  wrap.appendChild(makeField('Posição X', makeRange('sedit-x-' + id, 0, 560, parseInt(el.style.left), 'px', function (val) {
     el.style.left = val + 'px';
   })));
-  wrap.appendChild(makeField('Posição Y', makeRange(`sedit-y-${id}`, 0, 660, parseInt(el.style.top), 'px', val => {
+  wrap.appendChild(makeField('Posição Y', makeRange('sedit-y-' + id, 0, 660, parseInt(el.style.top), 'px', function (val) {
     el.style.top = val + 'px';
   })));
 
@@ -375,7 +475,7 @@ function buildShapeEditBody(id, el) {
 }
 
 function deleteShape(id) {
-  const idx = shapes.findIndex(s => s.id === id);
+  const idx = shapes.findIndex(function (s) { return s.id === id; });
   if (idx === -1) return;
   shapes[idx].el.remove();
   shapes.splice(idx, 1);
@@ -383,16 +483,13 @@ function deleteShape(id) {
   buildShapesList();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  LIMPAR TUDO
-// ══════════════════════════════════════════════════════════════
 function resetAll() {
-  texts.forEach(t => t.el.remove());
-  shapes.forEach(s => s.el.remove());
+  texts.forEach(function (t) { t.el.remove(); });
+  shapes.forEach(function (s) { s.el.remove(); });
   if (imgEl) { imgEl.remove(); imgEl = null; }
 
-  texts  = [];
-  shapes = [];
+  texts   = [];
+  shapes  = [];
   counter = 0;
 
   card.style.background         = '#ffffff';
@@ -402,20 +499,24 @@ function resetAll() {
   card.style.width              = '500px';
   card.style.minHeight          = '350px';
 
-  document.getElementById('cardBgColor').value  = '#ffffff';
-  document.getElementById('cardBgType').value   = 'solid';
+  document.getElementById('cardBgColor').value = '#ffffff';
+  document.getElementById('cardBgType').value  = 'solid';
+  document.getElementById('cardTheme').value   = 'blank';
+  document.getElementById('theme-hint').classList.remove('visible');
+  document.getElementById('theme-hint').textContent = '';
   onBgTypeChange();
 
-  document.getElementById('imgFile').value = '';
+  document.getElementById('imgFile').value               = '';
   document.getElementById('img-controls').style.display = 'none';
 
-  // reset range labels
-  document.querySelectorAll('.range-val').forEach(el => {
-    const rng = el.previousElementSibling;
-    if (rng && rng.type === 'range') {
-      rng.value = rng.defaultValue;
-      const suffix = el.textContent.replace(/[0-9]/g, '').trim() || 'px';
-      el.textContent = rng.defaultValue + suffix;
+  // reset ranges usando a tabela de sufixos — sem adivinhar
+  Object.keys(RANGE_SUFFIXES).forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.value = el.defaultValue;
+    const label = el.nextElementSibling;
+    if (label && label.classList.contains('range-val')) {
+      label.textContent = el.defaultValue + RANGE_SUFFIXES[id];
     }
   });
 
@@ -425,35 +526,24 @@ function resetAll() {
   updateHint();
 }
 
-// ══════════════════════════════════════════════════════════════
-//  CLAMP (mantém elementos dentro do cartão após redimensionar)
-// ══════════════════════════════════════════════════════════════
 function clampAllElements() {
   const cw = card.offsetWidth;
   const ch = card.offsetHeight;
-  [...texts, ...shapes].forEach(({ el }) => {
-    let x = parseInt(el.style.left) || 0;
-    let y = parseInt(el.style.top)  || 0;
-    const w = el.offsetWidth  || 0;
-    const h = el.offsetHeight || 0;
-    x = Math.max(0, Math.min(x, cw - w));
-    y = Math.max(0, Math.min(y, ch - h));
-    el.style.left = x + 'px';
-    el.style.top  = y + 'px';
+  texts.concat(shapes).forEach(function (item) {
+    let x = parseInt(item.el.style.left) || 0;
+    let y = parseInt(item.el.style.top)  || 0;
+    const w = item.el.offsetWidth  || 0;
+    const h = item.el.offsetHeight || 0;
+    item.el.style.left = Math.max(0, Math.min(x, cw - w)) + 'px';
+    item.el.style.top  = Math.max(0, Math.min(y, ch - h)) + 'px';
   });
   if (imgEl) {
     let x = parseInt(imgEl.style.left) || 0;
     let y = parseInt(imgEl.style.top)  || 0;
-    x = Math.max(0, Math.min(x, cw - imgEl.offsetWidth));
-    y = Math.max(0, Math.min(y, ch - imgEl.offsetHeight));
-    imgEl.style.left = x + 'px';
-    imgEl.style.top  = y + 'px';
+    imgEl.style.left = Math.max(0, Math.min(x, cw - imgEl.offsetWidth))  + 'px';
+    imgEl.style.top  = Math.max(0, Math.min(y, ch - imgEl.offsetHeight)) + 'px';
   }
 }
-
-// ══════════════════════════════════════════════════════════════
-//  HELPERS DE CRIAÇÃO DE CAMPOS (para accordion de edição)
-// ══════════════════════════════════════════════════════════════
 
 function makeField(labelText, control) {
   const wrap = document.createElement('div');
@@ -477,9 +567,9 @@ function makeRange(id, min, max, value, suffix, onChange) {
   input.value = clamp(value, min, max);
   input.style.cssText = 'flex:1;accent-color:var(--color-btn);height:4px;';
   const span  = document.createElement('span');
-  span.className  = 'range-val';
+  span.className   = 'range-val';
   span.textContent = input.value + suffix;
-  input.addEventListener('input', () => {
+  input.addEventListener('input', function () {
     span.textContent = input.value + suffix;
     onChange(parseInt(input.value, 10));
   });
@@ -493,9 +583,8 @@ function makeColor(id, currentVal, onChange) {
   input.type  = 'color';
   input.id    = id;
   input.style.cssText = 'height:32px;border:1px solid #b0d9c8;border-radius:6px;padding:2px 4px;background:#f4fbf8;cursor:pointer;width:100%;';
-  // tenta converter rgb -> hex para poder setar o value
   input.value = rgbToHex(currentVal) || '#000000';
-  input.addEventListener('input', () => onChange(input.value));
+  input.addEventListener('input', function () { onChange(input.value); });
   return input;
 }
 
@@ -503,47 +592,46 @@ function makeSelect(id, options, currentVal, onChange) {
   const sel = document.createElement('select');
   sel.id    = id;
   sel.style.cssText = 'border:1px solid #b0d9c8;border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px;background:#f4fbf8;color:#1a3a2a;width:100%;';
-  options.forEach(([val, label]) => {
+  options.forEach(function (pair) {
     const opt = document.createElement('option');
-    opt.value = val;
-    opt.textContent = label;
-    if (val === currentVal || val.replace(/['"]/g,'').trim() === currentVal.replace(/['"]/g,'').trim()) {
+    opt.value = pair[0];
+    opt.textContent = pair[1];
+    if (pair[0] === currentVal || pair[0].replace(/['"]/g, '').trim() === currentVal.replace(/['"]/g, '').trim()) {
       opt.selected = true;
     }
     sel.appendChild(opt);
   });
-  sel.addEventListener('change', () => onChange(sel.value));
+  sel.addEventListener('change', function () { onChange(sel.value); });
   return sel;
 }
 
 function makeTextarea(id, currentVal, maxLen, onChange) {
   const ta = document.createElement('textarea');
-  ta.id    = id;
+  ta.id       = id;
   ta.maxLength = maxLen;
-  ta.rows  = 3;
-  ta.value = currentVal;
+  ta.rows     = 3;
+  ta.value    = currentVal;
   ta.style.cssText = 'border:1px solid #b0d9c8;border-radius:6px;padding:7px 10px;font-family:inherit;font-size:13px;background:#f4fbf8;color:#1a3a2a;width:100%;resize:vertical;min-height:60px;max-height:130px;';
-  ta.addEventListener('input', () => onChange(ta.value));
+  ta.addEventListener('input', function () { onChange(ta.value); });
   return ta;
 }
 
-/** Monta o card de item (accordion interno da lista) */
 function buildItemCard(id, labelText, body, onDelete) {
-  const card = document.createElement('div');
-  card.className = 'item-card';
+  const itemCard = document.createElement('div');
+  itemCard.className = 'item-card';
 
   const header = document.createElement('div');
   header.className = 'item-card-header';
 
   const label = document.createElement('span');
-  label.className = 'item-card-label';
+  label.className   = 'item-card-label';
   label.textContent = labelText;
 
   const del = document.createElement('button');
-  del.className = 'item-card-del';
-  del.title = 'Remover';
+  del.className   = 'item-card-del';
+  del.title       = 'Remover';
   del.textContent = '✕';
-  del.addEventListener('click', e => { e.stopPropagation(); onDelete(); });
+  del.addEventListener('click', function (e) { e.stopPropagation(); onDelete(); });
 
   header.appendChild(label);
   header.appendChild(del);
@@ -552,20 +640,9 @@ function buildItemCard(id, labelText, body, onDelete) {
   bodyWrap.className = 'item-card-body';
   bodyWrap.appendChild(body);
 
-  header.addEventListener('click', () => bodyWrap.classList.toggle('open'));
+  header.addEventListener('click', function () { bodyWrap.classList.toggle('open'); });
 
-  card.appendChild(header);
-  card.appendChild(bodyWrap);
-  return card;
-}
-
-// ── Helpers genéricos ──────────────────────────────────────────
-function clamp(val, min, max) { return Math.max(min, Math.min(max, val)); }
-
-function rgbToHex(rgb) {
-  if (!rgb) return null;
-  if (/^#/.test(rgb)) return rgb;
-  const m = rgb.match(/\d+/g);
-  if (!m || m.length < 3) return null;
-  return '#' + m.slice(0,3).map(n => (+n).toString(16).padStart(2,'0')).join('');
+  itemCard.appendChild(header);
+  itemCard.appendChild(bodyWrap);
+  return itemCard;
 }

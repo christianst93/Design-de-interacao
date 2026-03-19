@@ -38,10 +38,33 @@
         </p>
       </section>
 
-      <div class="editor-wrapper">        
+      <div class="editor-wrapper">
         <aside class="controls-panel" id="controlsPanel">
           <h3 class="panel-title">⚙ Painel de edição</h3>
-          
+
+          <!-- ── TEMA ─────────────────────────────────────────── -->
+          <div class="accordion">
+            <button class="accordion-btn open" data-target="sec-theme">
+              <span>🎉 Tema do cartão</span>
+              <span class="arrow">▼</span>
+            </button>
+            <div class="accordion-body open" id="sec-theme">
+              <div class="field">
+                <label for="cardTheme">Escolha um tema</label>
+                <select id="cardTheme" onchange="applyTheme()">
+                  <option value="blank">— Sem tema (personalizado) —</option>
+                  <option value="birthday">🎂 Aniversário</option>
+                  <option value="christmas">🎄 Natal</option>
+                  <option value="easter">🐣 Páscoa</option>
+                  <option value="wedding">💍 Casamento</option>
+                  <option value="newyear">🎆 Ano Novo</option>
+                </select>
+              </div>
+              <p class="field-hint" id="theme-hint">Selecione um tema para pré-carregar cores e textos.</p>
+            </div>
+          </div>
+
+          <!-- ── FUNDO ───────────────────────────────────────── -->
           <div class="accordion">
             <button class="accordion-btn open" data-target="sec-bg">
               <span>🖼 Fundo do cartão</span>
@@ -97,10 +120,7 @@
                       min="0"
                       max="360"
                       value="135"
-                      oninput="
-                        syncRangeLabel(this, '°');
-                        applyBg();
-                      "
+                      oninput="syncRangeLabel(this, '°'); applyBg();"
                     >
                     <span class="range-val">135°</span>
                   </div>
@@ -129,10 +149,7 @@
                     min="280"
                     max="600"
                     value="500"
-                    oninput="
-                      syncRangeLabel(this, 'px');
-                      resizeCard();
-                    "
+                    oninput="syncRangeLabel(this, 'px'); resizeCard();"
                   >
                   <span class="range-val">500px</span>
                 </div>
@@ -146,17 +163,15 @@
                     min="200"
                     max="700"
                     value="350"
-                    oninput="
-                      syncRangeLabel(this, 'px');
-                      resizeCard();
-                    "
+                    oninput="syncRangeLabel(this, 'px'); resizeCard();"
                   >
                   <span class="range-val">350px</span>
                 </div>
               </div>
             </div>
           </div>
-          
+
+          <!-- ── IMAGEM ──────────────────────────────────────── -->
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-img">
               <span>📷 Inserir imagem</span>
@@ -184,10 +199,7 @@
                       min="20"
                       max="580"
                       value="180"
-                      oninput="
-                        syncRangeLabel(this, 'px');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, 'px'); applyImg();"
                     >
                     <span class="range-val">180px</span>
                   </div>
@@ -201,10 +213,7 @@
                       min="20"
                       max="680"
                       value="140"
-                      oninput="
-                        syncRangeLabel(this, 'px');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, 'px'); applyImg();"
                     >
                     <span class="range-val">140px</span>
                   </div>
@@ -218,10 +227,7 @@
                       min="0"
                       max="300"
                       value="0"
-                      oninput="
-                        syncRangeLabel(this, 'px');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, 'px'); applyImg();"
                     >
                     <span class="range-val">0px</span>
                   </div>
@@ -235,10 +241,7 @@
                       min="0"
                       max="560"
                       value="10"
-                      oninput="
-                        syncRangeLabel(this, 'px');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, 'px'); applyImg();"
                     >
                     <span class="range-val">10px</span>
                   </div>
@@ -252,10 +255,7 @@
                       min="0"
                       max="660"
                       value="10"
-                      oninput="
-                        syncRangeLabel(this, 'px');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, 'px'); applyImg();"
                     >
                     <span class="range-val">10px</span>
                   </div>
@@ -269,10 +269,7 @@
                       min="5"
                       max="100"
                       value="100"
-                      oninput="
-                        syncRangeLabel(this, '%');
-                        applyImg();
-                      "
+                      oninput="syncRangeLabel(this, '%'); applyImg();"
                     >
                     <span class="range-val">100%</span>
                   </div>
@@ -283,7 +280,8 @@
               </div>
             </div>
           </div>
-          
+
+          <!-- ── TEXTOS ──────────────────────────────────────── -->
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-text">
               <span>✏️ Textos</span>
@@ -314,9 +312,7 @@
                     <option value="'Nunito Sans'">Nunito Sans</option>
                     <option value="'Work Sans'">Work Sans</option>
                     <option value="Georgia, serif">Georgia (Serif)</option>
-                    <option value="'Courier New', monospace">
-                      Courier New (Mono)
-                    </option>
+                    <option value="'Courier New', monospace">Courier New (Mono)</option>
                   </select>
                 </div>
 
@@ -375,7 +371,6 @@
                       id="newTextBg"
                       value="#ffffff"
                       disabled
-                      oninput=""
                     >
                   </div>
                 </div>
@@ -413,11 +408,12 @@
                   + Adicionar texto
                 </button>
               </fieldset>
-              
+
               <div id="texts-list" class="items-list"></div>
             </div>
           </div>
-          
+
+          <!-- ── FORMAS ──────────────────────────────────────── -->
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-shapes">
               <span>▭ Formas decorativas</span>
@@ -528,17 +524,14 @@
               <div id="shapes-list" class="items-list"></div>
             </div>
           </div>
-          
+
           <div class="reset-row">
-            <button
-              class="btn-action btn-danger full-width"
-              onclick="resetAll()"
-            >
+            <button class="btn-action btn-danger full-width" onclick="resetAll()">
               🗑 Limpar tudo
             </button>
           </div>
         </aside>
-        
+
         <div class="preview-col">
           <p class="preview-label">Pré-visualização em tempo real</p>
           <div id="card">
