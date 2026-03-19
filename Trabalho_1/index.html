@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="pt-BR">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&family=Nunito+Sans:wght@200..1000&family=Work+Sans:wght@100..900&display=swap"
       rel="stylesheet"
-    />
+    >
     <title>Trabalho 1 - Editor de Cartões</title>
   </head>
   <body>
@@ -18,13 +18,11 @@
       </div>
     </header>
 
-    <hr />
+    <hr>
 
     <nav>
       <div class="botoes">
-        <a href="/Design-de-interacao/Apresentacao_trabalhos/index.html"
-          >Apresentação</a
-        >
+        <a href="/Design-de-interacao/Apresentacao_trabalhos/index.html">Apresentação</a>
         <a href="/Design-de-interacao/Trabalho_1/">Trabalho 1</a>
         <a href="trabalho2.html">Trabalho 2</a>
         <a href="trabalho3.html">Trabalho 3</a>
@@ -67,7 +65,7 @@
                     id="cardBgColor"
                     value="#ffffff"
                     oninput="applyBg()"
-                  />
+                  >
                 </div>
               </div>
 
@@ -79,7 +77,7 @@
                     id="gradColor1"
                     value="#a8edea"
                     oninput="applyBg()"
-                  />
+                  >
                 </div>
                 <div class="field">
                   <label for="gradColor2">Cor final</label>
@@ -88,7 +86,7 @@
                     id="gradColor2"
                     value="#fed6e3"
                     oninput="applyBg()"
-                  />
+                  >
                 </div>
                 <div class="field">
                   <label for="gradAngle">Ângulo</label>
@@ -103,7 +101,7 @@
                         syncRangeLabel(this, '°');
                         applyBg();
                       "
-                    />
+                    >
                     <span class="range-val">135°</span>
                   </div>
                 </div>
@@ -117,7 +115,7 @@
                     id="bgImageFile"
                     accept="image/png,image/jpeg,image/webp,image/gif"
                     onchange="loadBgImage(this)"
-                  />
+                  >
                   <span class="field-hint">PNG, JPG, WEBP ou GIF</span>
                 </div>
               </div>
@@ -135,7 +133,7 @@
                       syncRangeLabel(this, 'px');
                       resizeCard();
                     "
-                  />
+                  >
                   <span class="range-val">500px</span>
                 </div>
               </div>
@@ -152,7 +150,7 @@
                       syncRangeLabel(this, 'px');
                       resizeCard();
                     "
-                  />
+                  >
                   <span class="range-val">350px</span>
                 </div>
               </div>
@@ -172,7 +170,7 @@
                   id="imgFile"
                   accept="image/png,image/jpeg,image/webp,image/gif"
                   onchange="onImgFileChange(this)"
-                />
+                >
                 <span class="field-hint">PNG, JPG, WEBP ou GIF</span>
               </div>
 
@@ -190,7 +188,7 @@
                         syncRangeLabel(this, 'px');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">180px</span>
                   </div>
                 </div>
@@ -207,7 +205,7 @@
                         syncRangeLabel(this, 'px');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">140px</span>
                   </div>
                 </div>
@@ -224,7 +222,7 @@
                         syncRangeLabel(this, 'px');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">0px</span>
                   </div>
                 </div>
@@ -241,7 +239,7 @@
                         syncRangeLabel(this, 'px');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -258,7 +256,7 @@
                         syncRangeLabel(this, 'px');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -275,7 +273,7 @@
                         syncRangeLabel(this, '%');
                         applyImg();
                       "
-                    />
+                    >
                     <span class="range-val">100%</span>
                   </div>
                 </div>
@@ -332,14 +330,14 @@
                       max="80"
                       value="24"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">24px</span>
                   </div>
                 </div>
 
                 <div class="field">
                   <label for="newTextColor">Cor do texto</label>
-                  <input type="color" id="newTextColor" value="#1a1a1a" />
+                  <input type="color" id="newTextColor" value="#1a1a1a">
                 </div>
 
                 <div class="two-col">
@@ -369,16 +367,16 @@
                         type="checkbox"
                         id="newTextBgEnabled"
                         onchange="toggleNewTextBg()"
-                      />
+                      >
                       Ativar fundo
                     </label>
                     <input
                       type="color"
                       id="newTextBg"
-                      value="#ffffffcc"
+                      value="#ffffff"
                       disabled
                       oninput=""
-                    />
+                    >
                   </div>
                 </div>
 
@@ -392,7 +390,7 @@
                       max="460"
                       value="10"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -406,7 +404,7 @@
                       max="640"
                       value="10"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -431,7 +429,7 @@
 
                 <div class="field">
                   <label for="shapeColor">Cor de fundo</label>
-                  <input type="color" id="shapeColor" value="#9fe1cb" />
+                  <input type="color" id="shapeColor" value="#9fe1cb">
                 </div>
 
                 <div class="two-col">
@@ -445,7 +443,7 @@
                         max="580"
                         value="120"
                         oninput="syncRangeLabel(this, 'px')"
-                      />
+                      >
                       <span class="range-val">120px</span>
                     </div>
                   </div>
@@ -459,7 +457,7 @@
                         max="680"
                         value="60"
                         oninput="syncRangeLabel(this, 'px')"
-                      />
+                      >
                       <span class="range-val">60px</span>
                     </div>
                   </div>
@@ -475,7 +473,7 @@
                       max="300"
                       value="6"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">6px</span>
                   </div>
                 </div>
@@ -489,7 +487,7 @@
                       max="100"
                       value="100"
                       oninput="syncRangeLabel(this, '%')"
-                    />
+                    >
                     <span class="range-val">100%</span>
                   </div>
                 </div>
@@ -503,7 +501,7 @@
                       max="560"
                       value="10"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -517,7 +515,7 @@
                       max="640"
                       value="10"
                       oninput="syncRangeLabel(this, 'px')"
-                    />
+                    >
                     <span class="range-val">10px</span>
                   </div>
                 </div>
@@ -555,9 +553,7 @@
     <footer>
       <p>Disciplina: Design de interação | Aluno: Christian Torres</p>
       <p>
-        <a href="https://github.com/christianst93" target="_blank"
-          >github.com/christianst93</a
-        >
+        <a href="https://github.com/christianst93" target="_blank">github.com/christianst93</a>
       </p>
     </footer>
 
