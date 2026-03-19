@@ -40,12 +40,10 @@
         </p>
       </section>
 
-      <div class="editor-wrapper">
-        <!-- ── Painel de controles ──────────────────────────────── -->
+      <div class="editor-wrapper">        
         <aside class="controls-panel" id="controlsPanel">
           <h3 class="panel-title">⚙ Painel de edição</h3>
-
-          <!-- 1. Fundo ------------------------------------------- -->
+          
           <div class="accordion">
             <button class="accordion-btn open" data-target="sec-bg">
               <span>🖼 Fundo do cartão</span>
@@ -160,8 +158,7 @@
               </div>
             </div>
           </div>
-
-          <!-- 2. Imagem no cartão --------------------------------- -->
+          
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-img">
               <span>📷 Inserir imagem</span>
@@ -288,8 +285,7 @@
               </div>
             </div>
           </div>
-
-          <!-- 3. Textos ------------------------------------------ -->
+          
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-text">
               <span>✏️ Textos</span>
@@ -381,7 +377,7 @@
                       id="newTextBg"
                       value="#ffffffcc"
                       disabled
-                      oninput="/* live preview not needed here */"
+                      oninput=""
                     />
                   </div>
                 </div>
@@ -419,13 +415,11 @@
                   + Adicionar texto
                 </button>
               </fieldset>
-
-              <!-- Lista de textos -->
+              
               <div id="texts-list" class="items-list"></div>
             </div>
           </div>
-
-          <!-- 4. Formas ------------------------------------------ -->
+          
           <div class="accordion">
             <button class="accordion-btn" data-target="sec-shapes">
               <span>▭ Formas decorativas</span>
@@ -536,8 +530,7 @@
               <div id="shapes-list" class="items-list"></div>
             </div>
           </div>
-
-          <!-- Limpar tudo --------------------------------------- -->
+          
           <div class="reset-row">
             <button
               class="btn-action btn-danger full-width"
@@ -547,8 +540,7 @@
             </button>
           </div>
         </aside>
-
-        <!-- ── Pré-visualização ──────────────────────────────────── -->
+        
         <div class="preview-col">
           <p class="preview-label">Pré-visualização em tempo real</p>
           <div id="card">
