@@ -244,6 +244,11 @@ main {
   margin-top: 8px;
 }
 
+.card:has(img) {
+  padding: 0;
+  overflow: hidden;
+}
+
 a {
   color: #ffffff;
   text-decoration: none;
