@@ -258,7 +258,6 @@ nav {
 }
 #theme-hint.visible { display: block; }
 
-/* Range */
 .range-row {
   display: flex;
   align-items: center;

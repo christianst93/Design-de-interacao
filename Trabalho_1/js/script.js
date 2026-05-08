@@ -509,7 +509,6 @@ function resetAll() {
   document.getElementById('imgFile').value               = '';
   document.getElementById('img-controls').style.display = 'none';
 
-  // reset ranges usando a tabela de sufixos — sem adivinhar
   Object.keys(RANGE_SUFFIXES).forEach(function (id) {
     const el = document.getElementById(id);
     if (!el) return;
