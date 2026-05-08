@@ -16,7 +16,7 @@ class MyHeader extends HTMLElement {
                 <a href="/Design-de-interacao/Apresentacao_trabalhos/index.html">Apresentação</a>
                 <a href="/Design-de-interacao/Trabalho_1/">Trabalho 1</a>
                 <a href="/Design-de-interacao/Trabalho_2/">Trabalho 2</a>
-                <a href="trabalho3.html">Trabalho 3</a>
+                <a href="/Design-de-interacao/Trabalho_3/">Trabalho 3</a>
             </div>
         </nav>`;
     }
