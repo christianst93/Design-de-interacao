@@ -38,8 +38,7 @@ class MyProva extends HTMLElement {
             .e { color: #e61212; }
         </style>
 
-        <form id="prova">
-            <h2>Prova Online</h2>
+        <form id="prova">            
             ${this.dados.map((item, i) => `
                 <div class="pergunta">
                     <p><strong>${i + 1}. ${item.q}</strong></p>
