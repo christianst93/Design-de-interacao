@@ -2,6 +2,8 @@ class MyHeader extends HTMLElement {
     connectedCallback() {
         this.attachShadow({ mode: 'open' }).innerHTML = `
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+
             header {
                 text-align: center;
                 color: #fdfdfd;
@@ -76,6 +78,8 @@ class MyFooter extends HTMLElement {
     connectedCallback() {
         this.attachShadow({ mode: 'open' }).innerHTML = `
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap');
+            
             footer { 
                 background-color: #1e3a3a;
                 color: #9fe1cb;
