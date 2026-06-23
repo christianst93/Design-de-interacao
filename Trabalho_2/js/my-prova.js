@@ -1,15 +1,25 @@
 class MyProva extends HTMLElement {
     constructor() {
         super();
-        this.attachShadow({ mode: 'open' });
-        this.dados = [
-            { q: "Qual a capital da França?", a: ["Londres", "Paris", "Berlim"], c: 1 },
-            { q: "Quanto é 5 + 5?", a: ["10", "15", "20"], c: 0 },
-            { q: "Qual linguagem usamos para estruturar páginas?", a: ["Java", "CSS", "HTML"], c: 2 }
-        ];
+        this.attachShadow({ mode: 'open' }); 
+        
+        this.dados = [];
     }
 
-    connectedCallback() { this.render(); }
+    
+    async connectedCallback() { 
+        try {
+            
+            const resposta = await fetch('js/perguntas.json');
+            this.dados = await resposta.json();
+            
+            
+            this.render(); 
+        } catch (erro) {
+            console.error("Erro ao carregar as perguntas:", erro);
+            this.shadowRoot.innerHTML = `<p style="color: red; text-align: center;">Erro ao carregar a prova. Tente novamente mais tarde.</p>`;
+        }
+    } 
 
     render() {
         let html = `
@@ -39,12 +49,12 @@ class MyProva extends HTMLElement {
         </style>
 
         <form id="prova">            
-            ${this.dados.map((item, i) => `
+            ${this.dados.map((item, i) => ` 
                 <div class="pergunta">
                     <p><strong>${i + 1}. ${item.q}</strong></p>
                     ${item.a.map((alt, j) => `
                         <label><input type="radio" name="q${i}" value="${j}" required> ${alt}</label>
-                    `).join('')}
+                    `).join('')}  
                 </div>
             `).join('')}
             <button type="submit">Corrigir Prova</button>
@@ -73,8 +83,13 @@ class MyProva extends HTMLElement {
             <hr style="width:50%; margin: 20px auto; opacity: 0.3;">
             ${info} 
             <h3 style="margin: 15px 0;">Nota Final: ${(nota / this.dados.length * 10).toFixed(1)}</h3>
-            <button onclick="this.getRootNode().host.render()">Refazer Prova</button>
+            <button id="btn-refazer">Refazer Prova</button>
         `;
+
+        
+        this.shadowRoot.getElementById('btn-refazer').onclick = () => {
+            this.render();
+        };
     }
 }
 customElements.define('my-prova', MyProva);
