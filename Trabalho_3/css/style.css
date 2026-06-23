@@ -28,55 +28,6 @@ main {
   min-height: 75vh; 
 }
 
-header {
-  text-align: center;
-  color: #fdfdfd;
-  background-color: var(--color-header);
-  padding: 24px 20px;
-}
-
-header h1 { font-size: 24px; }
-
-header p {
-  font-size: 14px;
-  color: var(--color-accent);
-  margin-top: 6px;
-}
-
-hr {
-  border: none;
-  border-top: 1px solid #0f2020;
-}
-
-nav {
-  width: 100%;
-  padding: 14px 20px;
-  background-color: var(--color-nav);
-}
-
-.botoes {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.botoes a {
-  text-decoration: none;
-  background-color: var(--color-btn);
-  color: var(--color-btn-text);
-  padding: 8px 18px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  transition: 0.2s;
-}
-
-.botoes a:hover {
-  background-color: var(--color-accent);
-  color: #0f6e56;
-}
-
 .api-container {
   background: #ffffff;
   border-radius: 12px;
@@ -206,13 +157,6 @@ form button:hover {
 }
 
 @media (max-width: 600px) {
-  .botoes a {
-    flex: 1 1 calc(50% - 10px);
-    text-align: center;
-  }
-  
-  header h1 { font-size: 20px; }
-  
   .api-container {
     padding: 20px;
   }
