@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+    <title>Trabalho 3 - Múltiplas APIs</title>
+  </head>
+  <body>
+
+    <my-header></my-header>
+
+    <main>
+      <div class="api-container">
+        <h2>Trabalho 3 – Consulta Simultânea de Múltiplas APIs</h2>
+        
+        <div class="explicacao">
+          <p><strong>Como funciona?</strong></p>
+          <p>Esta página utiliza o comando <code>Promise.all</code> para disparar requisições assíncronas simultâneas para três servidores diferentes na internet.</p>
+          <p>Coletamos dados em tempo real sobre a cotação do Dólar (AwesomeAPI), a última notícia sobre exploração espacial (Spaceflight News) e uma publicação simulada de teste (JSONPlaceholder).</p>
+        </div>
+
+        <div id="resultado-multiplo">
+          <p class="loading">⏳ Carregando dados de todas as APIs simultaneamente...</p>
+        </div>
+      </div>
+    </main>
+
+    <my-footer></my-footer>
+
+    <script src="js/my-componentes.js"></script>
+    <script src="js/api-multipla.js"></script>
+  </body>
+</html>
