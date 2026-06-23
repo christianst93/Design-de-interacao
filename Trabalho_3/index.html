@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100..900&display=swap" rel="stylesheet">
+    <title>Trabalho 3 - Consulta de API</title>
+  </head>
+  <body>
+
+    <my-header></my-header>
+
+    <main>
+      <div class="api-container">
+        <h2>Trabalho 3 – Consulta de API em Tempo Real</h2>
+        
+        <div class="explicacao">
+          <p><strong>Como funciona?</strong></p>
+          <p>Digite o nome de um Pokémon (Limpo ou um número de ID) no campo abaixo e clique em "Consultar".</p>
+          <p>O navegador enviará o dado informado para uma API externa (PokeAPI) usando o comando <code>fetch</code>. 
+          A API processará o pedido e responderá com os detalhes técnicos estruturados, que nossa página lê e traduz de forma simples para você abaixo.</p>
+        </div>
+
+        <form id="apiForm">
+          <div class="form-grupo">
+            <label for="buscaInput">Nome ou ID do Pokémon:</label>
+            <input 
+              type="text" 
+              id="buscaInput" 
+              placeholder="Ex: ditto, pikachu ou 25" 
+              required
+            >
+          </div>
+          <button type="submit">Consultar API</button>
+        </form>
+
+        <div id="resultado">
+          <p class="status-inicial">Aguardando sua consulta... Os dados aparecerão aqui.</p>
+        </div>
+      </div>
+    </main>
+
+    <my-footer></my-footer>
+
+    <script src="js/my-componentes.js"></script>
+    <script src="js/api-script.js"></script>
+  </body>
+</html>

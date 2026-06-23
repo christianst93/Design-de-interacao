@@ -1,0 +1,5 @@
+[
+  { "q": "Qual a capital da França?", "a": ["Londres", "Paris", "Berlim"], "c": 1 },
+  { "q": "Quanto é 5 + 5?", "a": ["10", "15", "20"], "c": 0 },
+  { "q": "Qual linguagem usamos para estruturar páginas?", "a": ["Java", "CSS", "HTML"], "c": 2 }
+]

@@ -1,0 +1,219 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --color-header: #1e3a3a;
+  --color-nav: #163030;
+  --color-btn: #1d9e75;
+  --color-btn-text: #e1f5ee;
+  --color-bg: #e1f5ee;
+  --color-accent: #9fe1cb;
+  --color-footer: #1e3a3a;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--color-bg);
+  color: #1a1a1a;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  min-height: 75vh; 
+}
+
+header {
+  text-align: center;
+  color: #fdfdfd;
+  background-color: var(--color-header);
+  padding: 24px 20px;
+}
+
+header h1 { font-size: 24px; }
+
+header p {
+  font-size: 14px;
+  color: var(--color-accent);
+  margin-top: 6px;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #0f2020;
+}
+
+nav {
+  width: 100%;
+  padding: 14px 20px;
+  background-color: var(--color-nav);
+}
+
+.botoes {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.botoes a {
+  text-decoration: none;
+  background-color: var(--color-btn);
+  color: var(--color-btn-text);
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.botoes a:hover {
+  background-color: var(--color-accent);
+  color: #0f6e56;
+}
+
+.api-container {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.api-container h2 {
+  margin-bottom: 20px;
+  color: var(--color-header);
+}
+
+.explicacao {
+  background-color: var(--color-bg);
+  border-left: 4px solid var(--color-btn);
+  padding: 15px;
+  margin-bottom: 25px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+
+.explicacao p {
+  margin-bottom: 8px;
+}
+
+.explicacao p:last-child {
+  margin-bottom: 0;
+}
+
+.form-grupo {
+  margin-bottom: 20px;
+}
+
+.form-grupo label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: 0.3s;
+}
+
+input[type="text"]:focus {
+  border-color: var(--color-btn);
+  outline: none;
+}
+
+form button {
+  background-color: var(--color-btn);
+  color: var(--color-btn-text);
+  border: none;
+  width: 100%;
+  padding: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 700;
+  transition: 0.2s;
+}
+
+form button:hover {
+  background-color: var(--color-nav);
+}
+
+#resultado {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
+
+.status-inicial {
+  color: #666;
+  text-align: center;
+}
+
+.loading {
+  text-align: center;
+  color: var(--color-btn);
+  font-weight: 600;
+}
+
+.pokemon-card {
+  background: #fdfdfd;
+  border: 1px solid var(--color-accent);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.pokemon-titulo {
+  text-transform: capitalize;
+  color: var(--color-header);
+  margin-bottom: 10px;
+}
+
+.pokemon-img {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.pokemon-info {
+  margin: 6px 0;
+}
+
+.sucesso-msg {
+  color: #28a745;
+  display: block;
+  margin-top: 15px;
+}
+
+.erro-container {
+  text-align: center;
+  color: #e61212;
+}
+
+.erro-titulo {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+@media (max-width: 600px) {
+  .botoes a {
+    flex: 1 1 calc(50% - 10px);
+    text-align: center;
+  }
+  
+  header h1 { font-size: 20px; }
+  
+  .api-container {
+    padding: 20px;
+  }
+}
